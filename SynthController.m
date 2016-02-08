@@ -54,6 +54,9 @@
     ];
     [self updateMIDIDetails];
 
+    // Receive the virtual MIDI keyboard messages
+    [keyboardView setDelegate:self];
+
     // Set the virtual keyboard dimensions
     [keyboardDrawer setContentSize:NSMakeSize(0, 100)];
     [keyboardDrawer setMaxContentSize:NSMakeSize(0, 100)];
@@ -298,6 +301,20 @@
             stringWithFormat:@"mailto:simplesynth@notahat.com?subject=%@%%20%@", name, version
         ]
     ]];
+}
+
+
+- (void)MIDINoteOn:(int)note
+{
+    UInt32 channel = [channelsTable selectedRow];
+    [audioSystem sendMIDINote:note velocity:80 toChannel:channel];
+}
+
+
+- (void)MIDINoteOff:(int)note
+{
+    UInt32 channel = [channelsTable selectedRow];
+    [audioSystem sendMIDINote:note velocity:0 toChannel:channel];
 }
 
 

@@ -2,6 +2,7 @@
 @class PYMIDIVirtualDestination;
 #import "GaugeView.h"
 #import "AudioSystem.h"
+#import "KeyboardView.h"
 
 
 /*!
@@ -22,6 +23,7 @@
     IBOutlet NSSlider*		cutoffSlider;
     IBOutlet GaugeView*		cpuLoadGuage;
     IBOutlet NSDrawer*		keyboardDrawer;
+    IBOutlet KeyboardView*  keyboardView;
 
     NSTimer*					uiUpdateTimer;
 

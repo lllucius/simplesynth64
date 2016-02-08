@@ -61,5 +61,6 @@ typedef struct {
 - (void)setMIDIInput:(PYMIDIEndpoint*)endpoint;
 - (void)processMIDIPacketList:(const MIDIPacketList*)packets sender:(id)sender;
 - (void)handleMIDIMessage:(Byte*)message ofSize:(int)size;
+- (void)sendMIDINote:(int)note velocity:(int)velocity toChannel:(int)channel;
 
 @end

@@ -454,4 +454,19 @@
 }
 
 
+- (void)sendMIDINote:(int)note velocity:(int)velocity toChannel:(int)channel
+{
+    AudioUnit		synthUnit;
+
+    AUGraphGetNodeInfo (graph, synthNode, NULL, NULL, NULL, &synthUnit);
+
+    if (velocity == 0) {
+        MusicDeviceMIDIEvent (synthUnit, 0x80 | channel, note, 0, 0);
+    }
+    else {
+        MusicDeviceMIDIEvent (synthUnit, 0x90 | channel, note, velocity, 0);
+    }
+}
+
+
 @end

@@ -388,6 +388,7 @@
                 <outlet property="instrumentsDrawer" destination="530" id="556"/>
                 <outlet property="instrumentsTable" destination="540" id="545"/>
                 <outlet property="keyboardDrawer" destination="fnj-v8-HQX" id="T34-KH-vWF"/>
+                <outlet property="keyboardView" destination="SXS-3T-aKd" id="uSc-qK-qgY"/>
                 <outlet property="mainWindow" destination="21" id="573"/>
                 <outlet property="midiInputPopup" destination="195" id="201"/>
                 <outlet property="programNumberField" destination="549" id="553"/>
