@@ -107,7 +107,7 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         int key = 21 + i / 7 * 12 + whiteKeysMapping[j];
         if (key % 12 == 0) {
             NSString *text = [NSString stringWithFormat:@"C%i", (key / 12) - 1];
-            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:attributes];
+            NSAttributedString *attributedString = [[[NSAttributedString alloc] initWithString:text attributes:attributes] autorelease];
             NSSize textSize = [attributedString size];
             NSRect textFrame = { { x, 0 }, { width, textSize.height } };
             [attributedString drawInRect:textFrame];
