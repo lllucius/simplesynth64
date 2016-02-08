@@ -21,7 +21,8 @@
     IBOutlet NSTextField*	bankSelectLSBField;
     IBOutlet NSSlider*		cutoffSlider;
     IBOutlet GaugeView*		cpuLoadGuage;
-    
+    IBOutlet NSDrawer*		keyboardDrawer;
+
     NSTimer*					uiUpdateTimer;
 
     AudioSystem*				audioSystem;

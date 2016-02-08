@@ -53,9 +53,16 @@
         name:@"NSTableViewSelectionDidChangeNotification" object:instrumentsTable
     ];
     [self updateMIDIDetails];
-    // We must delay opening the drawer until the window is visible
+
+    // Set the virtual keyboard dimensions
+    [keyboardDrawer setContentSize:NSMakeSize(0, 100)];
+    [keyboardDrawer setMaxContentSize:NSMakeSize(0, 100)];
+    [keyboardDrawer setLeadingOffset:[keyboardDrawer trailingOffset]];
+
+    // We must delay opening the drawers until the window is visible
     [instrumentsDrawer performSelector:@selector(open) withObject:nil afterDelay:0];
-   
+    [keyboardDrawer performSelector:@selector(open) withObject:nil afterDelay:0];
+
     if (![mainWindow setFrameUsingName:@"MainWindowFrame"]) {
         // Center our window, taking the width of the drawer into account.
         [mainWindow center];

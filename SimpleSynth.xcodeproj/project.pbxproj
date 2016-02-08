@@ -34,6 +34,7 @@
 		C1FDC5EE0A2DDCFD00C94DEA /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FDC5ED0A2DDCFD00C94DEA /* CoreMIDI.framework */; };
 		C1FDC62A0A2DDD9900C94DEA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FDC6290A2DDD9900C94DEA /* AudioToolbox.framework */; };
 		C1FDC6800A2DE0A400C94DEA /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = C1FDC67F0A2DE0A400C94DEA /* AppIcon.icns */; };
+		E44189011C68E9B700BBA48E /* KeyboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = E44189001C68E9B700BBA48E /* KeyboardView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,8 @@
 		C1FDC6290A2DDD9900C94DEA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		C1FDC67F0A2DE0A400C94DEA /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		C1FDC6970A2DE10300C94DEA /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
+		E44188FF1C68E9B700BBA48E /* KeyboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
+		E44189001C68E9B700BBA48E /* KeyboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +230,8 @@
 			children = (
 				C1FDC5710A2DD88200C94DEA /* GaugeView.h */,
 				C1FDC5700A2DD88200C94DEA /* GaugeView.m */,
+				E44188FF1C68E9B700BBA48E /* KeyboardView.h */,
+				E44189001C68E9B700BBA48E /* KeyboardView.m */,
 			);
 			name = "View Classes";
 			sourceTree = "<group>";
@@ -342,6 +347,7 @@
 				C1FDC59D0A2DD8CD00C94DEA /* PYMIDIUtils.m in Sources */,
 				C1FDC59E0A2DD8CD00C94DEA /* PYMIDIVirtualDestination.m in Sources */,
 				C1FDC59F0A2DD8CD00C94DEA /* PYMIDIVirtualEndpoint.m in Sources */,
+				E44189011C68E9B700BBA48E /* KeyboardView.m in Sources */,
 				C1FDC5A00A2DD8CD00C94DEA /* PYMIDIVirtualSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
