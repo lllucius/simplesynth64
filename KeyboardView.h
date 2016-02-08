@@ -1,6 +1,15 @@
 #import <AppKit/AppKit.h>
 
 
+/*!
+ @class		KeyboardScrollView
+ Used to start the KeyboardView centered in the container scroll view.
+ */
+@interface KeyboardScrollView : NSScrollView
+
+@end
+
+
 @interface NSObject(KeyboardView)
 
 - (void)MIDINoteOn:(int)note;

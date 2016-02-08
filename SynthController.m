@@ -59,6 +59,7 @@
 
     // Set the virtual keyboard dimensions
     [keyboardDrawer setContentSize:NSMakeSize(0, 100)];
+    [keyboardDrawer setMinContentSize:NSMakeSize(0, 100)];
     [keyboardDrawer setMaxContentSize:NSMakeSize(0, 100)];
     [keyboardDrawer setLeadingOffset:[keyboardDrawer trailingOffset]];
 
@@ -315,6 +316,28 @@
 {
     UInt32 channel = [channelsTable selectedRow];
     [audioSystem sendMIDINote:note velocity:0 toChannel:channel];
+}
+
+
+-(void)scrollToCenter:(NSScrollView*)scrollView
+{
+    const CGFloat midX = NSMidX([[scrollView documentView] bounds]);
+    const CGFloat midY = NSMidY([[scrollView documentView] bounds]);
+
+    const CGFloat halfWidth = NSWidth([[scrollView contentView] frame]) / 2.0;
+    const CGFloat halfHeight = NSHeight([[scrollView contentView] frame]) / 2.0;
+
+    NSPoint newOrigin;
+    if([[scrollView documentView] isFlipped])
+    {
+        newOrigin = NSMakePoint(midX - halfWidth, midY + halfHeight);
+    }
+    else
+    {
+        newOrigin = NSMakePoint(midX - halfWidth, midY - halfHeight);
+    }
+
+    [[scrollView documentView] scrollPoint:newOrigin];
 }
 
 

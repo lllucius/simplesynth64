@@ -1,8 +1,39 @@
 #import "KeyboardView.h"
 
 
-const int keyboardWidth = 780;
-const int unknownNote = -1;
+@implementation KeyboardScrollView
+
+
+- (void)awakeFromNib
+{
+    const CGFloat midX = NSMidX([[self documentView] bounds]);
+    const CGFloat midY = NSMidY([[self documentView] bounds]);
+
+    const CGFloat halfWidth = NSWidth([[self contentView] frame]) / 2.0;
+    const CGFloat halfHeight = NSHeight([[self contentView] frame]) / 2.0;
+
+    NSPoint newOrigin;
+    if([[self documentView] isFlipped])
+    {
+        newOrigin = NSMakePoint(midX - halfWidth, midY + halfHeight);
+    }
+    else
+    {
+        newOrigin = NSMakePoint(midX - halfWidth, midY - halfHeight);
+    }
+
+    [[self documentView] scrollPoint:newOrigin];
+}
+
+
+@end
+
+
+static const int keyboardWidth = 780;
+static const int unknownNote = -1;
+
+static const int whiteKeysMapping[] = {0,2,3,5,7,8,10};
+static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 
 @implementation KeyboardView
@@ -36,11 +67,22 @@ const int unknownNote = -1;
     CGFloat height = CGRectGetHeight (frameRect);
     CGFloat width = keyboardWidth / 52;
 
+    // Draw the background
     [[NSColor whiteColor] set];
     NSRectFill (NSMakeRect (0, 0, keyboardWidth, height));
-
     [[NSColor blackColor] set];
 
+    // Set the attributes for the text
+    NSMutableParagraphStyle * paragraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+    [paragraphStyle setAlignment:NSCenterTextAlignment];
+
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSFont fontWithName:@"Helvetica" size:8], NSFontAttributeName,
+                                [NSColor blackColor], NSForegroundColorAttributeName,
+                                [NSColor clearColor], NSBackgroundColorAttributeName,
+                                paragraphStyle, NSParagraphStyleAttributeName, nil];
+
+    // Traverse all the keys
     for (int i=0; i<53; i++) {
         int j = i % 7;
 
@@ -54,23 +96,38 @@ const int unknownNote = -1;
             && CGRectContainsPoint (rectWhite, curPoint)
             && !(CGRectContainsPoint (rectBlackL, curPoint) && i != 0 && j != 2 && j != 5)
             && !(CGRectContainsPoint (rectBlackR, curPoint) && i != 51 && j != 1 && j != 4)) {
+
             // Key is on draw it in highlighted color
             [[NSColor blueColor] set];
             NSRectFill (rectWhite);
             [[NSColor blackColor] set];
         }
 
+        // Draw the text indicating the C key
+        int key = 21 + i / 7 * 12 + whiteKeysMapping[j];
+        if (key % 12 == 0) {
+            NSString *text = [NSString stringWithFormat:@"C%i", (key / 12) - 1];
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:attributes];
+            NSSize textSize = [attributedString size];
+            NSRect textFrame = { { x, 0 }, { width, textSize.height } };
+            [attributedString drawInRect:textFrame];
+        }
+
+        // Skip drawing the lines at the left and right margins
         if (i == 0 || i == 52)
             continue;
 
+        // Drawing the lines separating the white keys
         [NSBezierPath strokeLineFromPoint:NSMakePoint (x, 0) toPoint:NSMakePoint (x, height)];
 
+        // Skip drawing the the black keys after E and B
         if (j == 2 || j == 5)
             continue;
 
         // Black keys
         if (curNote != unknownNote
             && CGRectContainsPoint (rectBlackL, curPoint)) {
+
             // Key is on draw it in highlighted color
             [[NSColor blueColor] set];
             NSRectFill (rectBlackL);
@@ -148,9 +205,6 @@ const int unknownNote = -1;
     CGRect rectWhite = NSMakeRect (x, 0, width, height);
     CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, height / 2, width * 2 / 3, height);
     CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height / 2, width * 2 / 3, height);
-
-    const int whiteKeysMapping[] = {0,2,3,5,7,8,10};
-    const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
     // White keys
     if (!CGPointEqualToPoint (point, NSZeroPoint)
