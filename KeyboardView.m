@@ -89,8 +89,8 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         // White keys
         CGFloat x = i * width;
         CGRect rectWhite = NSMakeRect (x, 0, width, height);
-        CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, 2 * height / 5, width * 2 / 3, height);
-        CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, 2 * height / 5, width * 2 / 3, height);
+        CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
+        CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height * 2 / 5, width * 2 / 3, height);
 
         if (curNote != unknownNote
             && CGRectContainsPoint (rectWhite, curPoint)
@@ -148,8 +148,8 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    CGPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    int note  = [self keyForPoint:point];
+    curPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    int note  = [self keyForPoint:curPoint];
     if (note != curNote) {
         if (curNote != unknownNote) {
             if ([delegate respondsToSelector:@selector(MIDINoteOff:)]) {
@@ -158,7 +158,6 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
             [self setNeedsDisplay:YES];
         }
         curNote = note;
-        curPoint = point;
         if (curNote != unknownNote) {
             if ([delegate respondsToSelector:@selector(MIDINoteOn:)]) {
                 [delegate MIDINoteOn:curNote];
@@ -179,8 +178,8 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-    CGPoint point = CGPointZero;
-    int note  = [self keyForPoint:point];
+    curPoint = CGPointZero;
+    int note  = [self keyForPoint:curPoint];
     if (curNote != unknownNote) {
         if ([delegate respondsToSelector:@selector(MIDINoteOff:)]) {
             [delegate MIDINoteOff:curNote];
@@ -188,7 +187,6 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         [self setNeedsDisplay:YES];
     }
     curNote = note;
-    curPoint = point;
     //printf("%d\n", [self keyForPoint:curPoint]);
 }
 
@@ -203,8 +201,8 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
     CGFloat x = i * width;
     CGRect rectWhite = NSMakeRect (x, 0, width, height);
-    CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, height / 2, width * 2 / 3, height);
-    CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height / 2, width * 2 / 3, height);
+    CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
+    CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height * 2 / 5, width * 2 / 3, height);
 
     // White keys
     if (!CGPointEqualToPoint (point, NSZeroPoint)
