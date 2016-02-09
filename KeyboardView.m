@@ -30,7 +30,7 @@
 
 
 static const int keyboardWidth = 780;
-static const int unknownNote = -1;
+static const int unknownNote = INT_MIN;
 
 static const int whiteKeysMapping[] = {0,2,3,5,7,8,10};
 static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
@@ -64,8 +64,15 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 - (void)drawRect:(NSRect)frameRect
 {
-    CGFloat height = CGRectGetHeight (frameRect);
-    CGFloat width = keyboardWidth / 52;
+    int i, j, key;
+    CGFloat x, width, height;
+    CGRect rectWhite, rectBlack, textFrame;
+    NSString *text;
+    NSAttributedString *attributedString;
+    NSSize textSize;
+
+    height = CGRectGetHeight (frameRect);
+    width = keyboardWidth / 52;
 
     // Draw the background
     [[NSColor whiteColor] set];
@@ -83,20 +90,16 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
                                 paragraphStyle, NSParagraphStyleAttributeName, nil];
 
     // Traverse all the keys
-    for (int i=0; i<53; i++) {
-        int j = i % 7;
+    for (i=0; i<53; i++) {
+        j = i % 7;
+        key = 21 + i / 7 * 12;
 
         // White keys
-        CGFloat x = i * width;
-        CGRect rectWhite = NSMakeRect (x, 0, width, height);
-        CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
-        CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height * 2 / 5, width * 2 / 3, height);
+        x = i * width;
+        rectWhite = NSMakeRect (x, 0, width, height);
+        rectBlack = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
 
-        if (curNote != unknownNote
-            && CGRectContainsPoint (rectWhite, curPoint)
-            && !(CGRectContainsPoint (rectBlackL, curPoint) && i != 0 && j != 2 && j != 5)
-            && !(CGRectContainsPoint (rectBlackR, curPoint) && i != 51 && j != 1 && j != 4)) {
-
+        if (key + whiteKeysMapping[j] == curNote) {
             // Key is on draw it in highlighted color
             [[NSColor blueColor] set];
             NSRectFill (rectWhite);
@@ -104,12 +107,11 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         }
 
         // Draw the text indicating the C key
-        int key = 21 + i / 7 * 12 + whiteKeysMapping[j];
-        if (key % 12 == 0) {
-            NSString *text = [NSString stringWithFormat:@"C%i", (key / 12) - 1];
-            NSAttributedString *attributedString = [[[NSAttributedString alloc] initWithString:text attributes:attributes] autorelease];
-            NSSize textSize = [attributedString size];
-            NSRect textFrame = { { x, 0 }, { width, textSize.height } };
+        if ((key + whiteKeysMapping[j]) % 12 == 0) {
+            text = [NSString stringWithFormat:@"C%i", key / 12];
+            attributedString = [[[NSAttributedString alloc] initWithString:text attributes:attributes] autorelease];
+            textSize = [attributedString size];
+            textFrame = NSMakeRect (x, 0 , width, textSize.height);
             [attributedString drawInRect:textFrame];
         }
 
@@ -121,20 +123,18 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         [NSBezierPath strokeLineFromPoint:NSMakePoint (x, 0) toPoint:NSMakePoint (x, height)];
 
         // Skip drawing the the black keys after E and B
-        if (j == 2 || j == 5)
+        if (blackKeysMapping[j] == unknownNote)
             continue;
 
         // Black keys
-        if (curNote != unknownNote
-            && CGRectContainsPoint (rectBlackL, curPoint)) {
-
+        if (key + blackKeysMapping[j] == curNote) {
             // Key is on draw it in highlighted color
             [[NSColor blueColor] set];
-            NSRectFill (rectBlackL);
+            NSRectFill (rectBlack);
             [[NSColor blackColor] set];
         }
         else {
-            NSRectFill (rectBlackL);
+            NSRectFill (rectBlack);
         }
     }
 }
@@ -193,16 +193,19 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 - (int)keyForPoint:(CGPoint)point
 {
-    CGFloat height = CGRectGetHeight (self.frame);
-    CGFloat width = keyboardWidth / 52;
-    int i = point.x / width;
-    int j = i % 7;
-    int key = 21 + i / 7 * 12;
+    int i, j, key;
+    CGFloat x, width, height;
+    CGRect rectWhite, rectBlackL, rectBlackR;
 
-    CGFloat x = i * width;
-    CGRect rectWhite = NSMakeRect (x, 0, width, height);
-    CGRect rectBlackL = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
-    CGRect rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height * 2 / 5, width * 2 / 3, height);
+    height = CGRectGetHeight (self.frame);
+    width = keyboardWidth / 52;
+    i = point.x / width;
+    j = i % 7;
+    key = 21 + i / 7 * 12;
+    x = i * width;
+    rectWhite = NSMakeRect (x, 0, width, height);
+    rectBlackL = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
+    rectBlackR = NSMakeRect (x - width * 2 / 6 + width, height * 2 / 5, width * 2 / 3, height);
 
     // White keys
     if (!CGPointEqualToPoint (point, NSZeroPoint)
@@ -223,6 +226,7 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         key += blackKeysMapping[j+1];
         return key;
     }
+
     // Unkown key
     return unknownNote;
 }
