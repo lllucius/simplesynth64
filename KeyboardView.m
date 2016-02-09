@@ -172,8 +172,8 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    curPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    int note  = [self keyForPoint:curPoint];
+    CGPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    int note  = [self keyForPoint:point];
     if (note != curNote) {
         if (curNote != unknownNote) {
             if ([delegate respondsToSelector:@selector(MIDINoteOff:)]) {
@@ -202,8 +202,7 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-    curPoint = CGPointZero;
-    int note  = [self keyForPoint:curPoint];
+    int note  = [self keyForPoint:CGPointZero];
     if (curNote != unknownNote) {
         if ([delegate respondsToSelector:@selector(MIDINoteOff:)]) {
             [delegate MIDINoteOff:curNote];
