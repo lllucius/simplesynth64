@@ -67,37 +67,50 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
     int i, j, key;
     CGFloat x, width, height;
     CGRect rectWhite, rectBlack, textFrame;
-    NSString *text;
-    NSAttributedString *attributedString;
-    NSSize textSize;
 
+    NSString *text;
+    NSSize textSize;
+    NSAttributedString *attributedString;
+    NSDictionary *attributesNormal, *attributesHighlihted;
+    NSFont *font;
+    NSMutableParagraphStyle *paragraphStyle;
+    CGContextRef context;
+
+    // Get the white key dimensions
     height = CGRectGetHeight (frameRect);
     width = keyboardWidth / 52;
 
-    // Draw the background
+    // Draw background
     [[NSColor whiteColor] set];
     NSRectFill (NSMakeRect (0, 0, keyboardWidth, height));
     [[NSColor blackColor] set];
 
-    // Set the attributes for the text
-    NSMutableParagraphStyle * paragraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+    // Set attributes for text
+    paragraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
     [paragraphStyle setAlignment:NSCenterTextAlignment];
 
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSFont fontWithName:@"Helvetica" size:8], NSFontAttributeName,
-                                [NSColor blackColor], NSForegroundColorAttributeName,
-                                [NSColor clearColor], NSBackgroundColorAttributeName,
-                                paragraphStyle, NSParagraphStyleAttributeName, nil];
+    font = [NSFont fontWithName:@"Helvetica" size:8];
+
+    attributesNormal = [NSDictionary dictionaryWithObjectsAndKeys:
+                        font, NSFontAttributeName,
+                        [NSColor blackColor], NSForegroundColorAttributeName,
+                        paragraphStyle, NSParagraphStyleAttributeName, nil];
+
+    attributesHighlihted = [NSDictionary dictionaryWithObjectsAndKeys:
+                            font, NSFontAttributeName,
+                            [NSColor whiteColor], NSForegroundColorAttributeName,
+                            paragraphStyle, NSParagraphStyleAttributeName, nil];
 
     // Traverse all the keys
     for (i=0; i<53; i++) {
         j = i % 7;
         key = 21 + i / 7 * 12;
 
-        // White keys
         x = i * width;
         rectWhite = NSMakeRect (x, 0, width, height);
         rectBlack = NSMakeRect (x - width * 2 / 6, height * 2 / 5, width * 2 / 3, height);
+
+        // Draw the white keys
 
         if (key + whiteKeysMapping[j] == curNote) {
             // Key is on draw it in highlighted color
@@ -108,14 +121,25 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
 
         // Draw the text indicating the C key
         if ((key + whiteKeysMapping[j]) % 12 == 0) {
+            context = [[NSGraphicsContext currentContext] graphicsPort];
+            CGContextSaveGState (context);
+
             text = [NSString stringWithFormat:@"C%i", key / 12];
-            attributedString = [[[NSAttributedString alloc] initWithString:text attributes:attributes] autorelease];
+            if (key + whiteKeysMapping[j] == curNote) {
+                attributedString = [[[NSAttributedString alloc] initWithString:text attributes:attributesHighlihted] autorelease];
+            }
+            else {
+                attributedString = [[[NSAttributedString alloc] initWithString:text attributes:attributesNormal] autorelease];
+            }
+
             textSize = [attributedString size];
             textFrame = NSMakeRect (x, 0 , width, textSize.height);
             [attributedString drawInRect:textFrame];
+
+            CGContextRestoreGState (context);
         }
 
-        // Skip drawing the lines at the left and right margins
+        // Skip drawing the lines at the left and right edges
         if (i == 0 || i == 52)
             continue;
 
@@ -126,7 +150,7 @@ static const int blackKeysMapping[] = {-1,1,unknownNote,4,6,unknownNote,9,11};
         if (blackKeysMapping[j] == unknownNote)
             continue;
 
-        // Black keys
+        // Draw the black keys
         if (key + blackKeysMapping[j] == curNote) {
             // Key is on draw it in highlighted color
             [[NSColor blueColor] set];
