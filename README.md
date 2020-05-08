@@ -5,4 +5,4 @@ updated by rraallvvv (https://github.com/rraallvv/simplesynth.git).
 
 All I've done is package and sign it.
 
-![SimpleSynth64](https://user-images.githubusercontent.com/7347848/81375013-25c7d900-90c6-11ea-8ed4-360d01fbef51.png)
+![SimpleSynth64](https://user-images.githubusercontent.com/7347848/81375223-aab2f280-90c6-11ea-87aa-ce7e71153fb3.png)
