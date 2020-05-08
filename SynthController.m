@@ -15,7 +15,7 @@
     
     audioSystem = [[AudioSystem alloc] init];
     
-    virtualDestination = [[PYMIDIVirtualDestination alloc] initWithName:@"SimpleSynth virtual input"];
+    virtualDestination = [[PYMIDIVirtualDestination alloc] initWithName:@"SimpleSynth64 virtual input"];
     
     [self buildMIDIInputPopUp];
     [[NSNotificationCenter defaultCenter]
@@ -285,7 +285,7 @@
 
 - (IBAction)visitWebSite:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://notahat.com/simplesynth/"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/lllucius/simplesynth64"]];
 }
 
 
@@ -299,7 +299,7 @@
    
     [[NSWorkspace sharedWorkspace] openURL:[NSURL
         URLWithString:[NSString
-            stringWithFormat:@"mailto:simplesynth@notahat.com?subject=%@%%20%@", name, version
+            stringWithFormat:@"mailto:simplesynth64@homerow.net?subject=%@%%20%@", name, version
         ]
     ]];
 }

@@ -40,9 +40,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleHelpBookFolder</key>
-	<string>SimpleSynth Help</string>
+	<string>SimpleSynth64 Help</string>
 	<key>CFBundleHelpBookName</key>
-	<string>SimpleSynth Help</string>
+	<string>SimpleSynth64 Help</string>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
